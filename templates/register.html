@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block heading %}
+{{ headline }}
+{% endblock %}
+
+{% block body %}
+
+    <form action="{{ url_for('register') }}" method="post">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+
+        <button>Submit</button>
+    </form>
+
+{% endblock %}
