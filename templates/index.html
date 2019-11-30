@@ -6,8 +6,8 @@
 
 {% block body %}
     <h3>Search for a book here</h3>
-    <form action="/search" method="get">
-        <input type="text" name="book" placeholder="ISBN, title or author">
+    <form action="{{ url_for('search') }}" method="get">
+        <input type="text" name="book" placeholder="ISBN, title or author" required>
         <button type="submit">Search</button>
     </form>
 {% endblock %}
