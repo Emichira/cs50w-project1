@@ -42,7 +42,7 @@ def login_required(f):
 @app.route("/")
 @login_required
 def index():
-    return "Project 1: TODO"
+    return render_template("index.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -64,13 +64,13 @@ def login():
                                                                                     "incorrect.")
 
         # Remember which user has logged in
-        session["user_id"] = result[0]
-        session["user_name"] = result[1]
+        session["user_id"] = user_check[0]
+        session["user_name"] = user_check[1]
 
         return redirect(url_for("index"))
 
     else:
-        return render_template("login.html", headline="Login Here")
+        return render_template("login.html", headline="login here")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -121,3 +121,19 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/search", methods=["GET"])
+@login_required
+def search():
+    # https://stackoverflow.com/a/16664376
+    # capitalize search query
+    query = ('%' + request.args.get("book") + '%').title()
+
+    rows = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn LIKE :query OR title LIKE :query OR author LIKE :query LIMIT 10", {"query": query})
+
+    if rows.rowcount == 0:
+        return render_template("error.html", headline="Search Error", message="We cannot find the book"
+                                                                              "you are searching for.")
+
+    books = rows.fetchall()
+
+    return render_template("results.html", books=books)
