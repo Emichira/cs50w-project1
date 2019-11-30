@@ -5,5 +5,9 @@
 {% endblock %}
 
 {% block body %}
-{{ message }}
+    <h3>Search for a book here</h3>
+    <form action="/search" method="get">
+        <input type="text" name="book" placeholder="ISBN, title or author">
+        <button type="submit">Search</button>
+    </form>
 {% endblock %}
