@@ -1,7 +1,7 @@
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
-  user_id VARCHAR REFERENCES users,
-  book_id VARCHAR REFERENCES books,
+  user_id INTEGER REFERENCES users,
+  book_id INTEGER REFERENCES books,
   review VARCHAR NOT NULL,
   rating INTEGER NOT NULL
 );
