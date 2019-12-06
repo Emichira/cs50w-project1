@@ -161,13 +161,24 @@ nav ul li a {
     width: 29.33%;
     margin: 1%;
     padding: 1%;
-    height: 240px;
+    height: 440px;
     text-align: center;
     line-height: 1em;
 }
 
 .book:hover {
     opacity: 0.5;
+}
+
+.book-cover {
+    width: 100%;
+    margin: auto;
+    max-height: 180px;
+    overflow: hidden;
+}
+
+.book-cover img {
+    width: 40%;
 }
 
 .books {
@@ -188,6 +199,11 @@ nav ul li a {
         width: 100px;
     }
 
+    .searchButton {
+        width: 20%;
+        font-size: 10px;
+    }
+
     .book {
         width: 46%;
     }
@@ -196,6 +212,11 @@ nav ul li a {
 @media screen and (max-width: 480px) {
     .nav-bar ul li {
         width: 80px;
+    }
+
+    .searchButton {
+        width: 20%;
+        font-size: 10px;
     }
 
     .book {
