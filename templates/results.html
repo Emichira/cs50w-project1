@@ -9,6 +9,9 @@
         {% for book in books %}
             <div class="book">
                     <h2 class="book-title">{{book['title']}}</h2>
+                    <div class="book-cover">
+                        <img src="http://covers.openlibrary.org/b/isbn/{{book['isbn']}}-M.jpg">
+                    </div>
                     <h6 class="book-text">Author: {{book['author']}}</h6>
                     <h6 class="book-text">Year: {{book['year']}}</h6>
                     <h6 class="book-text">ISBN: {{book['isbn']}}</h6>
