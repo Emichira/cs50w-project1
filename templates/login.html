@@ -6,14 +6,17 @@
 
 {% block body %}
 
-    <form action="{{ url_for('login') }}" method="post">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required>
-        
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
-        
-        <button>Submit</button>
+    <form class="login" action="{{ url_for('login') }}" method="post">
+        <div class="box">
+
+            <h2>Dashboard</h2>
+
+            <input type="text" name="username" placeholder="username" class="sign-in" required>
+
+            <input type="password" name="password" placeholder="password" class="sign-in" required>
+
+            <button class="btn">Submit</button>
+        </div>
     </form>
 
 {% endblock %}

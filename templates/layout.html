@@ -2,31 +2,40 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width">
-        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
         <link rel="stylesheet" href="../static/style.css">
         <title>Project 1</title>
-    </head>
-    <body>
-        <div class="nav-bar">
+        <!--
+        READ: https://stackoverflow.com/questions/54267740/how-to-show-logout-in-place-of-login-signup-after-i-have-logged-in-to-my-flask-a
+        -->
+        <nav>
             <ul>
                 <li>
-                    <a href="/">Index</a>
+                    <a href="/">Home</a>
                 </li>
+                {% if session['logged_in'] %}
+                <li>
+                    <a href="/logout">Logout</a>
+                </li>
+                {% else %}
                 <li>
                     <a href="/login">Login</a>
                 </li>
                 <li>
                     <a href="/register">Register</a>
                 </li>
-                <li>
-                    <a href="/logout">Logout</a>
-                </li>
+                {% endif %}
             </ul>
+        </nav>
+
+    </head>
+    <body>
+        
+        <div class="wrapper">
+            <h1>{% block title %}{% endblock %}</h1>
+
+            {% block body %}
+            {% endblock %}
         </div>
         
-        <h1>{% block title %}{% endblock %}</h1>
-
-        {% block body %}
-        {% endblock %}
     </body>
 </html>
