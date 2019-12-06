@@ -3,3 +3,4 @@ flask_session/
 venv/
 .DS_Store
 .idea/
+.flaskenv
