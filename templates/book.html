@@ -12,13 +12,14 @@
 
             <h2>About the Book</h2>
             <div class="book-cover">
-                <img src="http://covers.openlibrary.org/b/isbn/{{bookInfo[0].isbn}}-M.jpg">
+                <img src="http://covers.openlibrary.org/b/isbn/{{book_info[0].isbn}}-M.jpg">
             </div>
 
-            <p>{{ bookInfo[0].title }}, {{ bookInfo[0].year }}</p>
-            <p>{{ bookInfo[0].author }}</p>
-            <p>GoodReads Ratings</p>
-            <p>{{ bookInfo[0].isbn }}</p>
+            <p>{{ book_info[0].title }}, {{ book_info[0].year }}</p>
+            <p>{{ book_info[0].author }}</p>
+            <p>No. of Ratings: {{ book_info[1]['work_ratings_count'] }}</p>
+            <p>Average Rating: {{ book_info[1]['average_rating'] }}</p>
+            <p>{{ book_info[0].isbn }}</p>
 
         </section>
 
@@ -45,7 +46,7 @@
 
                     <div class="rating-input">
 
-                        <textarea name="comment" id="comment" class="form-control" rows="10" placeholder="Write your review here" required></textarea>
+                        <textarea name="review" id="review" class="form-control" rows="10" placeholder="Write your review here" required></textarea>
 
                     </div>
 
@@ -66,16 +67,17 @@
     <div class="user-reviews">
 
         <h2>Reviews from Other Users</h2>
-
+        {% for review in reviews %}
         <div class="list-group">
 
             <div>
                 <h6 style="color:white">{{review['username']}} said...</h6>
             </div>
-            <p>{{review['comment']}}</p>
+            <p>{{review['review']}}</p>
             <p>Rated: {{review['rating']}}</p>
 
         </div>
+        {% endfor %}
 
     </div>
 
