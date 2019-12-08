@@ -3,7 +3,7 @@ import requests
 
 from functools import wraps
 
-from flask import Flask, session, render_template, request, redirect, url_for
+from flask import Flask, flash, jsonify, render_template, request, redirect, session, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -31,17 +31,19 @@ db = scoped_session(sessionmaker(bind=engine))
 # See https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
 def login_required(f):
     @wraps(f)
+
     def decorated_function(*args, **kwargs):
+
         if session.get("user_id") is None:
             return redirect(url_for("login"))
         return f(*args, **kwargs)
-
     return decorated_function
 
 
 @app.route("/")
 @login_required
 def index():
+    """ Loads the index page and shows the search box. """
     return render_template("index.html")
 
 
@@ -60,16 +62,19 @@ def login():
         # Ensure the password is correct
         # flask-bcrypt Usage: bcrypt.check_password_hash(pw_hash, candidate)
         if not bcrypt.check_password_hash(user_check[2].encode('utf-8'), password.encode('utf-8')):
-            return render_template("error.html", headline="Password Error", message="The password you entered is " 
+            return render_template("error.html", headline="Password Error", message="The password you entered is "
                                                                                     "incorrect.")
 
         # Remember which user has logged in
         session["user_id"] = user_check[0]
         session["user_name"] = user_check[1]
+        session["logged_in"] = True
 
+        flash("You are logged in.")
         return redirect(url_for("index"))
 
     else:
+        # Return unlogged-in user to login for logging in
         return render_template("login.html", headline="login here")
 
 
@@ -114,7 +119,6 @@ def register():
 
 @app.route("/logout")
 def logout():
-
     # Forget user id
     session.clear()
 
@@ -128,12 +132,101 @@ def search():
     # capitalize search query
     query = ('%' + request.args.get("book") + '%').title()
 
-    rows = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn LIKE :query OR title LIKE :query OR author LIKE :query LIMIT 10", {"query": query})
+    rows = db.execute(
+        "SELECT isbn, title, author, year FROM books WHERE isbn LIKE :query OR title LIKE :query OR author LIKE :query LIMIT 10",
+        {"query": query})
 
     if rows.rowcount == 0:
-        return render_template("error.html", headline="Search Error", message="We cannot find the book"
-                                                                              "you are searching for.")
+        return render_template("error.html", headline="Search Error", message="We cannot find the book "
+                                                                              "you are searching for."), 404
 
     books = rows.fetchall()
 
     return render_template("results.html", books=books)
+
+
+@app.route("/book/<isbn>", methods=["GET", "POST"])
+@login_required
+def book(isbn):
+    if request.method == "GET":
+
+        row = db.execute("SELECT isbn, title, author, year FROM books WHERE isbn = :isbn", {"isbn": isbn})
+
+        # fetchone returns tuple, use fetchall for a list
+        book_info = row.fetchall()
+
+        """ FETCH GOODREADS REVIEWS """
+        key = os.getenv("GOODREADS_KEY")
+
+        # API call: https://www.goodreads.com/api/index#book.review_counts
+        review_query = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": key, "isbns": isbn})
+
+        if review_query.status_code == 422 or review_query.status_code == 404:
+            raise Exception("ERROR: API request unsuccessful.")
+
+        # Clean the query data, end result is a dict
+        review_stats = review_query.json()["books"][0]
+
+        book_info.append(review_stats)
+
+        """ FETCH USER REVIEWS FROM DATABASE """
+        row = db.execute("SELECT id FROM books WHERE isbn = :isbn", {"isbn": isbn})
+        book_id = row.fetchone()[0] # tuple format (id, )
+
+        # Fetch book reviews
+        rows = db.execute("SELECT username, review, rating FROM users JOIN reviews ON users.id = reviews.user_id \
+                    WHERE book_id = :book_id", {"book_id": book_id})
+
+        reviews = rows.fetchall() # When empty, returns empty []
+
+        return render_template("book.html", book_info=book_info, reviews=reviews)
+    else:
+        # POST method
+        current_user = session["user_id"]
+
+        # Fetch data from the form in book.html
+        rating = request.form.get("rating")
+        review = request.form.get("review")
+
+        # Get book id
+        row = db.execute("SELECT id FROM books WHERE isbn = :isbn", {"isbn": isbn})
+        book_id = row.fetchone()[0] # tuple format (id, )
+
+        # Check if current user can submit a review (each user submits only 1 review per book)
+        check_row = db.execute("SELECT * FROM reviews WHERE user_id = :user_id AND book_id = :book_id",
+                               {"user_id": current_user, "book_id": book_id})
+
+        if check_row.rowcount == 1:
+            flash("You already submitted a review for this book", "warning")
+            return redirect("/book/" + isbn)
+
+        # Save rating and review
+        rating = int(rating)
+
+        db.execute("INSERT INTO reviews (user_id, book_id, review, rating) VALUES (:user_id, :book_id, :review, :rating)",
+                                 {"user_id": current_user, "book_id": book_id, "review": review, "rating": rating})
+        db.commit()
+
+        flash("Your review has been submitted.", "info")
+
+        return redirect("/book/" + isbn)
+
+
+@app.route("/api/<isbn>", methods=['GET'])
+@login_required
+def api_call(isbn):
+    row = db.execute("SELECT title, author, year, isbn, COUNT(reviews.id) as review_count, \
+                        AVG(reviews.rating) as average_score FROM books JOIN reviews \
+                        ON books.id = reviews.book_id WHERE isbn = :isbn \
+                        GROUP BY title, author, year, isbn", {"isbn": isbn})
+
+    if row.rowcount != 1:
+        return jsonify({"Error": "Invalid ISBN"}), 422
+
+    data = row.fetchone()
+    api_data = dict(data.items())
+
+    # Round Avg Score to 2 decimals.
+    api_data['average_score'] = float('%.2f' % (api_data['average_score']))
+
+    return jsonify(api_data)
