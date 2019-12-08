@@ -16,6 +16,8 @@ def main():
     with open("books.csv") as file:
         
         reader = csv.reader(file, delimiter=',')
+
+        next(reader, None)  # skip the headers, https://stackoverflow.com/a/14257599/6297414
         
         for isbn, title, author, year in reader:
             db.execute("INSERT INTO books (isbn, title, author, year) \
