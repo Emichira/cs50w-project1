@@ -6,6 +6,77 @@
 
 {% block body %}
 
+    <span class="columns">
 
+        <section>
+
+            <h2>About the Book</h2>
+            <div class="book-cover">
+                <img src="http://covers.openlibrary.org/b/isbn/{{bookInfo[0].isbn}}-M.jpg">
+            </div>
+
+            <p>{{ bookInfo[0].title }}, {{ bookInfo[0].year }}</p>
+            <p>{{ bookInfo[0].author }}</p>
+            <p>GoodReads Ratings</p>
+            <p>{{ bookInfo[0].isbn }}</p>
+
+        </section>
+
+        <section>
+
+            <div>
+
+            <h2>Your Review</h2>
+
+                <form method="POST" class="form-border">
+
+                    <div>
+
+                        <label for="rating">Rate this book</label>
+                        <select id="rating" name="rating" class="form-control" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option selected value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+
+                    </div>
+
+                    <div class="rating-input">
+
+                        <textarea name="comment" id="comment" class="form-control" rows="10" placeholder="Write your review here" required></textarea>
+
+                    </div>
+
+                    <div>
+
+                        <button class="btn rating-btn" type="submit">Submit</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </span>
+
+    <div class="user-reviews">
+
+        <h2>Reviews from Other Users</h2>
+
+        <div class="list-group">
+
+            <div>
+                <h6 style="color:white">{{review['username']}} said...</h6>
+            </div>
+            <p>{{review['comment']}}</p>
+            <p>Rated: {{review['rating']}}</p>
+
+        </div>
+
+    </div>
 
 {% endblock %}
