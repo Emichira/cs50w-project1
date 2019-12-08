@@ -157,7 +157,8 @@ nav ul li a {
 /* RESULTS.HTML */
 .book {
     float: left;
-    background: #eee;
+    background: #9C4327;
+    border-radius: 5px;
     width: 29.33%;
     margin: 1%;
     padding: 1%;
@@ -192,6 +193,61 @@ nav ul li a {
     clear: both;
 }
 
+/* BOOK.HTML */
+.columns {
+    background: #DD8730;
+    display: block;
+    width: 90%;
+    margin: auto;
+    text-align: center;
+    border: #333 solid;
+    border-radius: 5px;
+}
+
+.columns section {
+    display: inline-block;
+    vertical-align: top;
+    width: 44%;
+    height: auto;
+    margin: 1%;
+    padding: 1%;
+}
+
+.columns section img {
+    width: 50%;
+}
+
+.rating-input #comment {
+    display: block;
+    width: 95%;
+    margin: 15px auto;
+    border-radius: 5px;
+    border: 3px solid #aaa;
+}
+
+.rating-btn {
+    display: block;
+    margin: auto;
+}
+
+.columns:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.user-reviews {
+    width: 90%;
+    margin: auto;
+    margin-top: 10px;
+    padding: 10px 0;
+    text-align: center;
+    background: #9C4327;
+    border: #333 solid;
+    border-radius: 5px;
+}
+
+
 
 /* MEDIA QUERIES */
 @media screen and (max-width: 768px) {
@@ -207,6 +263,10 @@ nav ul li a {
     .book {
         width: 46%;
     }
+
+    .columns section {
+        width: 44%;
+    }
 }
 
 @media screen and (max-width: 480px) {
@@ -220,6 +280,10 @@ nav ul li a {
     }
 
     .book {
+        width: 96%;
+    }
+
+    .columns section {
         width: 96%;
     }
 }
