@@ -8,6 +8,10 @@ body {
     z-index: 0;
 }
 
+p {
+    margin: auto;
+}
+
 /* NAVIGATION */
 nav {
     background: #333;
@@ -175,7 +179,7 @@ nav ul li a {
     width: 100%;
     margin: auto;
     max-height: 180px;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .book-cover img {
@@ -217,17 +221,21 @@ nav ul li a {
     width: 50%;
 }
 
-.rating-input #comment {
+.rating-input {
+    margin: 20px auto;
+}
+
+.rating-input textarea {
     display: block;
     width: 95%;
-    margin: 15px auto;
+    margin: 0 auto;
     border-radius: 5px;
     border: 3px solid #aaa;
 }
 
 .rating-btn {
     display: block;
-    margin: auto;
+    margin: 10px auto;
 }
 
 .columns:after {
