@@ -29,6 +29,17 @@
 
     </head>
     <body>
+
+        <!--
+        FLASK FLASHING
+        https://flask.palletsprojects.com/en/1.1.x/patterns/flashing/
+        https://flask.palletsprojects.com/en/1.1.x/api/#flask.flash
+        -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div role="alert"> {{ messages | join(" ") }} </div>
+            {% endif %}
+        {% endwith %}
         
         <div class="wrapper">
             <h1>{% block title %}{% endblock %}</h1>
