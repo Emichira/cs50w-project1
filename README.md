@@ -49,7 +49,6 @@ $ export GOODREADS_KEY = Your Goodreads Developer API Key # See: https://www.goo
 $ git branch web50/projects/2019/x/1
 $ git branch
 $ git checkout web50/projects/2019/x/1
-$ git git remote set-url origin git@github.com:me50/YOURUSERNAME.git
 $ git push https://github.com/me50/YOURUSERNAME.git web50/projects/2019/x/1 # HTTPS Method
 $ git push git@github.com:me50/YOURUSERNAME.git web50/projects/2019/x/1 # SSH Method
 ```
