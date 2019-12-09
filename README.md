@@ -6,6 +6,9 @@
 
 This is my solution to CS50W Project 1.
 
+## Run this app on Heroku
+Use this link to try out the app: https://nk-cs50w-project1.herokuapp.com/
+
 ## App Screenshots
 ![Login Page](https://github.com/nahuakang/cs50w-project1/blob/master/static/login.png)
 ![Login Page](https://github.com/nahuakang/cs50w-project1/blob/master/static/register.png)
