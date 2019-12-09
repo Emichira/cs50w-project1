@@ -42,3 +42,12 @@ $ export DATABASE_URL = Your Heroku Postgres DB URI
 $ export FLASK_DEBUG = 1
 $ export GOODREADS_KEY = Your Goodreads Developer API Key # See: https://www.goodreads.com/api
 ```
+
+## How to Submit Project to CS50W
+[See here](https://stackoverflow.com/q/46014537/6297414) on how to push to remote URL and specific branch.
+```
+$ git branch web50/projects/2019/x/1
+$ git branch
+$ git checkout web50/projects/2019/x/1
+$ git push https://github.com/me50/YOURUSERNAME.git web50/projects/2019/x/1
+```
