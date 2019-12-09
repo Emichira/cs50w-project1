@@ -2,7 +2,7 @@
 
 ## Web Programming with Python and JavaScript
 
-(Project Instructions)[https://docs.cs50.net/ocw/web/projects/1/project1.html]
+[Project Instructions](https://docs.cs50.net/ocw/web/projects/1/project1.html)
 
 This is my solution to CS50W Project 1.
 
